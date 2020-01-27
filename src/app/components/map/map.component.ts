@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 
 // OpenLayers
 import 'ol/ol.css';
@@ -13,6 +13,7 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { Fill, Stroke, Circle, Style } from 'ol/style';
+import { PopupComponent } from '../popup/popup.component';
 
 // Reprojections and conversions
 import proj4 from 'proj4';
@@ -29,7 +30,9 @@ export class MapComponent implements AfterViewInit {
   private map: Map = null;
   private mapId = 'MyMap';
 
-  constructor() {  }
+  @ViewChild(PopupComponent, {static: false}) popup;
+
+  constructor() { }
 
   ngAfterViewInit() {
     // Define and register projection
@@ -69,7 +72,6 @@ export class MapComponent implements AfterViewInit {
       source: vectorSource,
       style: pointStyle
     });
-    console.log(vectorLayer);
 
     this.map = new Map({
       target: this.mapId,
@@ -83,6 +85,7 @@ export class MapComponent implements AfterViewInit {
         center: fromLonLat([13.4050, 52.5200]),
         zoom: 11
       }),
+      overlays: [this.popup.popup],
       controls: defaultControls().extend([
         new ZoomToExtent({
           extent: [
@@ -91,6 +94,33 @@ export class MapComponent implements AfterViewInit {
           ]
         })
       ])
+    });
+
+    // Display popup on click
+    this.map.on('click', (event) => {
+      const ft = this.map.forEachFeatureAtPixel(event.pixel, (feature) => {
+        console.log(feature);
+        return feature;
+      });
+
+      if (ft) {
+        const facilityName = ft.getProperties().ANLAGENBEZ;
+        const coordinates = ft.getGeometry().getCoordinates();
+        this.popup.popup.setPosition(coordinates);
+
+        // https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
+        facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
+
+        // $(el).popover({
+        //   placement: 'top',
+        //   html: true,
+        //   content: el.get('name')
+        // });
+        // $(el).popover('show');
+      } else {
+        // $(el).popover('destroy');
+        this.popup.popup.setPosition(undefined);
+      }
     });
   }
 }
