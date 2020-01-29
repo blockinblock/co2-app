@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-
+import { MessageService } from '../../services/message.service';
 import Overlay from 'ol/Overlay';
 
 @Component({
@@ -12,18 +12,14 @@ export class PopupComponent implements AfterViewInit {
 
   private popup;
   private content;
+  // private menuState = 'out';
 
-  constructor() { }
+  constructor(private messageService: MessageService) { }
 
   ngAfterViewInit() {
-    // https://stackoverflow.com/questions/37587732/how-to-call-another-components-function-in-angular2
-    // https://openlayers.org/en/latest/examples/icon.html
-    // https://openlayers.org/en/latest/examples/popup.html
-
     // Elements that make up the popup
     const container = document.getElementById('popup');
     const closer = document.getElementById('popup-closer');
-
     this.content = document.getElementById('popup-content');
 
     // Create an overlay to anchor the popup to the map
@@ -41,5 +37,11 @@ export class PopupComponent implements AfterViewInit {
       closer.blur();
       return false;
     };
+  }
+
+  showDash() {
+    // 1-line if statement that toggles the value:
+    // this.menuState = this.menuState === 'out' ? 'in' : 'out';
+    this.messageService.setMessage('in');
   }
 }

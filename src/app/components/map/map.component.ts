@@ -30,7 +30,9 @@ export class MapComponent implements AfterViewInit {
   private map: Map = null;
   private mapId = 'MyMap';
 
+  // TODO: swap for Angular 8!
   @ViewChild(PopupComponent, {static: false}) popup;
+  // @ViewChild(PopupComponent) popup;
 
   constructor() { }
 
@@ -73,6 +75,7 @@ export class MapComponent implements AfterViewInit {
       style: pointStyle
     });
 
+    // Create the map
     this.map = new Map({
       target: this.mapId,
       layers: [
@@ -99,7 +102,6 @@ export class MapComponent implements AfterViewInit {
     // Display popup on click
     this.map.on('click', (event) => {
       const ft = this.map.forEachFeatureAtPixel(event.pixel, (feature) => {
-        console.log(feature);
         return feature;
       });
 
@@ -108,17 +110,8 @@ export class MapComponent implements AfterViewInit {
         const coordinates = ft.getGeometry().getCoordinates();
         this.popup.popup.setPosition(coordinates);
 
-        // https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
         facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
-
-        // $(el).popover({
-        //   placement: 'top',
-        //   html: true,
-        //   content: el.get('name')
-        // });
-        // $(el).popover('show');
       } else {
-        // $(el).popover('destroy');
         this.popup.popup.setPosition(undefined);
       }
     });
