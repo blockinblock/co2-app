@@ -24,6 +24,8 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "./node_modules/ol/ol.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -89,6 +91,8 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "./node_modules/ol/ol.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -120,6 +124,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "co2-app"
 }
