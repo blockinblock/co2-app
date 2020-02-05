@@ -13,12 +13,15 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { Fill, Stroke, Circle, Style } from 'ol/style';
-import { PopupComponent } from '../popup/popup.component';
 
 // Reprojections and conversions
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { fromLonLat } from 'ol/proj';
+
+// App components
+import { PopupComponent } from '../popup/popup.component';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-map',
@@ -34,7 +37,7 @@ export class MapComponent implements AfterViewInit {
   @ViewChild(PopupComponent, {static: false}) popup;
   // @ViewChild(PopupComponent) popup;
 
-  constructor() { }
+  constructor(private messageService: MessageService) { }
 
   ngAfterViewInit() {
     // Define and register projection
@@ -111,8 +114,12 @@ export class MapComponent implements AfterViewInit {
         this.popup.popup.setPosition(coordinates);
 
         facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
+
+        this.messageService.setFeature(ft.getProperties());
       } else {
+        // Close popup and dashboard
         this.popup.popup.setPosition(undefined);
+        this.messageService.setMessage('out');
       }
     });
   }

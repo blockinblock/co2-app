@@ -24,3 +24,8 @@ body {
 .ol-popup-closer:after {
   content: "✖";
 }
+
+.container {
+  display: flex;
+  justify-content: space-around;
+}

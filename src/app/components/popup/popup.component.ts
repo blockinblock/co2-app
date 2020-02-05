@@ -12,7 +12,6 @@ export class PopupComponent implements AfterViewInit {
 
   private popup;
   private content;
-  // private menuState = 'out';
 
   constructor(private messageService: MessageService) { }
 
@@ -39,9 +38,10 @@ export class PopupComponent implements AfterViewInit {
     };
   }
 
+  /**
+   * Shows the dashboard
+   */
   showDash() {
-    // 1-line if statement that toggles the value:
-    // this.menuState = this.menuState === 'out' ? 'in' : 'out';
     this.messageService.setMessage('in');
   }
 }

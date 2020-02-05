@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { MessageService } from '../../services/message.service';
 
 @Component({
@@ -7,12 +7,9 @@ import { MessageService } from '../../services/message.service';
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements AfterViewInit {
 
   constructor(private messageService: MessageService) { }
-
-  ngOnInit() {
-  }
 
   ngAfterViewInit() {
     const closer = document.getElementById('popup-closer-dash');

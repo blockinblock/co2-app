@@ -9,17 +9,24 @@ import { PopupComponent } from './components/popup/popup.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MessageService } from './services/message.service';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BarchartComponent } from './components/barchart/barchart.component';
+import { DetailsComponent } from './components/details/details.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     PopupComponent,
-    DashboardComponent
+    DashboardComponent,
+    BarchartComponent,
+    DetailsComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    NgxChartsModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
