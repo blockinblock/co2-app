@@ -24,9 +24,6 @@ export class AppComponent {
   title = 'co2-app';
   private menuState = 'out';
 
-  // https://angular.io/guide/animations
-  // https://www.thecodecampus.de/blog/angular-2-animate-creating-sliding-side-navigation/
-
   constructor(private messageService: MessageService) {
     this.messageService.setMessage$.subscribe((value) => {
       this.menuState = value;

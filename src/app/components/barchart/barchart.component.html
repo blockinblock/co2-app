@@ -1,7 +1,8 @@
+<br>
 <ngx-charts-bar-vertical
   [view]="view"
   [scheme]="colorScheme"
-  [results]="single"
+  [results]="data"
   [gradient]="gradient"
   [xAxis]="showXAxis"
   [yAxis]="showYAxis"
@@ -11,4 +12,17 @@
   [xAxisLabel]="xAxisLabel"
   [yAxisLabel]="yAxisLabel"
   (select)="onSelect($event)">
+
+  <!-- https://github.com/swimlane/ngx-charts/issues/932 -->
+  <!-- https://stackoverflow.com/questions/51557129/custom-tooltip-contents-ngx-charts-angular2-typescript -->
+  <ng-template #seriesTooltipTemplate let-model="model">
+    This is vertical line tooltip template
+    <pre>{{model|json}}</pre>        
+  </ng-template>
+
+  <ng-template #tooltipTemplate let-model="model">
+    <!-- <pre>{{model|json}}</pre> -->
+    <pre>val: {{model.value}}</pre>
+  </ng-template>
+
 </ngx-charts-bar-vertical>

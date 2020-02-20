@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
+
+import { MatButtonModule } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
@@ -25,8 +28,11 @@ import { DetailsComponent } from './components/details/details.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    NgxChartsModule,
     MatButtonModule,
-    NgxChartsModule
+    MatTableModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

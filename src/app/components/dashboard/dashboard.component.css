@@ -1,11 +1,10 @@
 :host {
   background: #FFFFFF;
   position: fixed;
+  height: 220px;
   left: 0;
-  top: 75%;
   right: 0;
   bottom: 0;
   width: auto;
-  z-index: 9999;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }

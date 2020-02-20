@@ -51,10 +51,8 @@ export class MapComponent implements AfterViewInit {
         '<a href="https://daten.berlin.de/datensaetze/co2-emissionen-durch-anlagen-nach-dem-treibhausgas-emissionshandelsgesetz-tehg-2"' +
         ' target="_blank">Umweltatlas Berlin / TEHG (dl-de/by-2-0)</a>'
       ],
-      url: (extent): string => {
-        return 'https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s08_07_2tehganlagen?service=wfs&' +
-        'version=1.1.0&request=GetFeature&typename=fis:s08_07_2tehganlagen&outputFormat=application/json';
-      },
+      url: () => 'https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s08_07_2tehganlagen?service=wfs&' +
+                 'version=1.1.0&request=GetFeature&typename=fis:s08_07_2tehganlagen&outputFormat=application/json',
       strategy: bboxStrategy
     });
 

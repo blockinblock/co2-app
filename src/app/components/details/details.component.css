@@ -1,0 +1,17 @@
+.mat-table {
+    width: 100%;
+    background: #fff;
+}
+
+.mat-row {
+    height: 26px;
+}
+
+.mat-row:hover {
+    background-color: #8fbc8f;
+  }
+
+.mat-cell {
+    color: #000;
+    padding-right: 10px;
+}
