@@ -11,18 +11,15 @@
   [showYAxisLabel]="showYAxisLabel"
   [xAxisLabel]="xAxisLabel"
   [yAxisLabel]="yAxisLabel"
+  [xAxisTickFormatting]="formatYear"
   (select)="onSelect($event)">
 
-  <!-- https://github.com/swimlane/ngx-charts/issues/932 -->
-  <!-- https://stackoverflow.com/questions/51557129/custom-tooltip-contents-ngx-charts-angular2-typescript -->
-  <ng-template #seriesTooltipTemplate let-model="model">
-    This is vertical line tooltip template
-    <pre>{{model|json}}</pre>        
-  </ng-template>
-
   <ng-template #tooltipTemplate let-model="model">
-    <!-- <pre>{{model|json}}</pre> -->
-    <pre>val: {{model.value}}</pre>
+    <p>
+      <span>{{ model.name }}</span>
+      <br>
+      <span class="tooltip-value">{{ model.value | formatNumber }}</span>      
+    </p>
   </ng-template>
-
+  
 </ngx-charts-bar-vertical>

@@ -15,6 +15,7 @@ import { MessageService } from './services/message.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BarchartComponent } from './components/barchart/barchart.component';
 import { DetailsComponent } from './components/details/details.component';
+import { FormatNumberPipe } from './utils/format-number.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { DetailsComponent } from './components/details/details.component';
     PopupComponent,
     DashboardComponent,
     BarchartComponent,
-    DetailsComponent
+    DetailsComponent,
+    FormatNumberPipe
   ],
   imports: [
     BrowserModule,

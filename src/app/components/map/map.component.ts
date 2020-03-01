@@ -3,7 +3,8 @@ import { Component, AfterViewInit, ViewChild } from '@angular/core';
 // OpenLayers
 import 'ol/ol.css';
 import Map from 'ol/Map';
-import View from 'ol/View';
+import { pointerMove } from 'ol/events/condition';
+import Select from 'ol/interaction/Select';
 import ZoomToExtent from 'ol/control/ZoomToExtent';
 import { defaults as defaultControls } from 'ol/control';
 import TileLayer from 'ol/layer/Tile';
@@ -11,13 +12,11 @@ import { Vector } from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { bbox as bboxStrategy } from 'ol/loadingstrategy';
-import { Fill, Stroke, Circle, Style } from 'ol/style';
+import { colourMap } from './ol.styles';
 
 // Reprojections and conversions
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
-import { fromLonLat } from 'ol/proj';
 
 // App components
 import { PopupComponent } from '../popup/popup.component';
@@ -33,47 +32,77 @@ export class MapComponent implements AfterViewInit {
   private map: Map = null;
   private mapId = 'MyMap';
 
+  private select = new Select({
+    condition: pointerMove,
+    style: (feature) => {
+      return colourMap.get(`${this.getStyleClass(feature)}Hi`);    
+    }
+  });
+
+  private url = 'https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s08_07_2tehganlagen?service=wfs&' +
+                'version=1.1.0&request=GetFeature&typename=fis:s08_07_2tehganlagen&outputFormat=application/json';
+
+  private vectorSource = new VectorSource({
+    attributions: [
+      '<a href="https://daten.berlin.de/datensaetze/co2-emissionen-durch-anlagen-nach-dem-treibhausgas-emissionshandelsgesetz-tehg-2"' +
+      ' target="_blank">Umweltatlas Berlin / TEHG (dl-de/by-2-0)</a>'
+    ]
+  });
+
   // TODO: swap for Angular 8!
   @ViewChild(PopupComponent, {static: false}) popup;
   // @ViewChild(PopupComponent) popup;
 
   constructor(private messageService: MessageService) { }
 
+  /**
+   * Takes a feature and determines the styling class
+   * @param feature an OpenLayers Feature (ol/Feature)
+   */
+  private getStyleClass(feature) {
+    const val = feature.get('SD2017');
+    let styleClass = '';
+
+    if (val <= 100000) {
+      styleClass = 'green';
+    } else if (val > 100000 && val <= 500000) {
+      styleClass = 'yellow';
+    } else if (val > 500000 && val <= 1000000) {
+      styleClass = 'red';
+    } else if (val > 1000000) {
+      styleClass = 'purple';
+    } else {
+      styleClass = 'nodata';
+    }
+    return styleClass;
+  }
+
   ngAfterViewInit() {
     // Define and register projection
     proj4.defs('EPSG:25833', '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs');
     register(proj4);
 
-    // Create a new vector source
-    const vectorSource = new VectorSource({
-      format: new GeoJSON({}),
-      attributions: [
-        '<a href="https://daten.berlin.de/datensaetze/co2-emissionen-durch-anlagen-nach-dem-treibhausgas-emissionshandelsgesetz-tehg-2"' +
-        ' target="_blank">Umweltatlas Berlin / TEHG (dl-de/by-2-0)</a>'
-      ],
-      url: () => 'https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s08_07_2tehganlagen?service=wfs&' +
-                 'version=1.1.0&request=GetFeature&typename=fis:s08_07_2tehganlagen&outputFormat=application/json',
-      strategy: bboxStrategy
-    });
+    // Get the data
+    fetch(this.url, {
+      method: 'GET'
+    }).then((response) => {
+      return response.json();
+    }).then((json) => {
+      const features = new GeoJSON({
+        dataProjection: 'EPSG:25833',
+        featureProjection: 'EPSG:3857'
+      }).readFeatures(json);
+      this.vectorSource.addFeatures(features);
 
-    // Create style
-    const pointStyle = new Style({
-      image: new Circle({
-        fill: new Fill({
-          color: 'rgba(255,255,255,0.4)'
-        }),
-        stroke: new Stroke({
-          color: 'rgba(0, 0, 255, 1.0)',
-          width: 2
-        }),
-        radius: 5
-      })
-    });
+      // Work out style class and get it from the colour map
+      this.vectorSource.getFeatures().forEach(feature => {        
+        const styleClass = this.getStyleClass(feature);
+        feature.setStyle(colourMap.get(styleClass));
+      });
 
-    // Create a vector layer
-    const vectorLayer = new Vector({
-      source: vectorSource,
-      style: pointStyle
+      this.map.getView().fit(this.vectorSource.getExtent());
+    }).catch((error) => {
+      console.log(error);
     });
 
     // Create the map
@@ -83,12 +112,10 @@ export class MapComponent implements AfterViewInit {
         new TileLayer({
           source: new OSM()
         }),
-        vectorLayer
+        new Vector({
+          source: this.vectorSource
+        })
       ],
-      view: new View({
-        center: fromLonLat([13.4050, 52.5200]),
-        zoom: 11
-      }),
       overlays: [this.popup.popup],
       controls: defaultControls().extend([
         new ZoomToExtent({
@@ -120,5 +147,8 @@ export class MapComponent implements AfterViewInit {
         this.messageService.setMessage('out');
       }
     });
+
+    // Change feature styling on hover
+    this.map.addInteraction(this.select);
   }
 }

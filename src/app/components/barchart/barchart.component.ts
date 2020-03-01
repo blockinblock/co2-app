@@ -35,79 +35,39 @@ export class BarchartComponent {
   constructor(private messageService: MessageService) {
     // Get feature details
     this.messageService.setFeature$.subscribe((value) => {
-      let dataArr: any[];
+      let dataArr = [];
 
       // TODO: explanation of co2 on hover
-      // TODO: Better way to do this? e.g. What if there are no values, function to create array?
-      dataArr = [
+      const startYear = 2005;
+      const endYear = 2017;
+
+      for (let i = startYear; i <= endYear; i++) {
+        let val;
+
+        // Workaround for values that are zero
+        value[`SD${i}`] === '' ? val = '0.00000000000000001' : val = value[`SD${i}`];
+
+        dataArr.push(
           {
-            name: '2005',
-            value: value.SD2005
-          },
-          {
-            name: '2006',
-            value: value.SD2006
-          },
-          {
-            name: '2007',
-            value: value.SD2007
-          },
-          {
-            name: '2008',
-            value: value.SD2008
-          },
-          {
-            name: '2009',
-            value: value.SD2009
-          },
-          {
-            name: '2010',
-            value: value.SD2010
-          },
-          {
-            name: '2011',
-            value: value.SD2011
-          },
-          {
-            name: '2012',
-            value: value.SD2012
-          },
-          {
-            name: '2013',
-            value: value.SD2013
-          },
-          {
-            name: '2014',
-            value: value.SD2014
-          },
-          {
-            name: '2015',
-            value: value.SD2015
-          },
-          {
-            name: '2016',
-            value: value.SD2016
-          },
-          {
-            name: '2017',
-            value: value.SD2017
+            name: i,
+            value: val
           }
-      ];
+        );
+      }
       this.data = dataArr;
-      console.log(dataArr);
 
       // Assign chart object
       Object.assign(this, { dataArr });
     });
   }
 
-  // formatNumber(value) {
-  //   // TODO: if value is empty??
-  //   const formattedNum = (parseInt(value, 10)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-  //   console.log(formattedNum);
-
-  //   return value;
-  // }
+  /**
+   * Custom tick formatting to remove locale specific number formatting (thousand seperator)
+   * @param val the year to be formatted
+   */
+  formatYear(val) {
+    return val;
+  }
 
   onSelect(event) {
     console.log(event);
