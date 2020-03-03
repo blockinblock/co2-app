@@ -12,7 +12,8 @@ import { Vector } from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { colourMap } from './ol.styles';
+import { colourMapNormal, colourMapHi } from './ol.styles';
+import { data } from './data';
 
 // Reprojections and conversions
 import proj4 from 'proj4';
@@ -31,13 +32,7 @@ import { MessageService } from '../../services/message.service';
 export class MapComponent implements AfterViewInit {
   private map: Map = null;
   private mapId = 'MyMap';
-
-  private select = new Select({
-    condition: pointerMove,
-    style: (feature) => {
-      return colourMap.get(`${this.getStyleClass(feature)}Hi`);    
-    }
-  });
+  private jsonResponse;
 
   private url = 'https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s08_07_2tehganlagen?service=wfs&' +
                 'version=1.1.0&request=GetFeature&typename=fis:s08_07_2tehganlagen&outputFormat=application/json';
@@ -47,6 +42,14 @@ export class MapComponent implements AfterViewInit {
       '<a href="https://daten.berlin.de/datensaetze/co2-emissionen-durch-anlagen-nach-dem-treibhausgas-emissionshandelsgesetz-tehg-2"' +
       ' target="_blank">Umweltatlas Berlin / TEHG (dl-de/by-2-0)</a>'
     ]
+  });
+
+  // Set hover style
+  private select = new Select({
+    condition: pointerMove,
+    style: feature => {
+      return colourMapHi.get(this.getStyleClass(feature));
+    }
   });
 
   // TODO: swap for Angular 8!
@@ -61,18 +64,18 @@ export class MapComponent implements AfterViewInit {
    */
   private getStyleClass(feature) {
     const val = feature.get('SD2017');
-    let styleClass = '';
+    let styleClass;
 
     if (val <= 100000) {
-      styleClass = 'green';
+      styleClass = 0;
     } else if (val > 100000 && val <= 500000) {
-      styleClass = 'yellow';
+      styleClass = 1;
     } else if (val > 500000 && val <= 1000000) {
-      styleClass = 'red';
+      styleClass = 2;
     } else if (val > 1000000) {
-      styleClass = 'purple';
+      styleClass = 3;
     } else {
-      styleClass = 'nodata';
+      styleClass = 4;
     }
     return styleClass;
   }
@@ -82,73 +85,82 @@ export class MapComponent implements AfterViewInit {
     proj4.defs('EPSG:25833', '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs');
     register(proj4);
 
-    // Get the data
-    fetch(this.url, {
-      method: 'GET'
-    }).then((response) => {
-      return response.json();
-    }).then((json) => {
-      const features = new GeoJSON({
-        dataProjection: 'EPSG:25833',
-        featureProjection: 'EPSG:3857'
-      }).readFeatures(json);
-      this.vectorSource.addFeatures(features);
+    // Get the data async
+    const getData = async () => {
+      try {
+        const response = await fetch(this.url);
+        this.jsonResponse = await response.json();
 
-      // Work out style class and get it from the colour map
-      this.vectorSource.getFeatures().forEach(feature => {        
-        const styleClass = this.getStyleClass(feature);
-        feature.setStyle(colourMap.get(styleClass));
-      });
+      } catch (e) {
+        // TODO: display message to user
+        console.log(e);
 
-      this.map.getView().fit(this.vectorSource.getExtent());
-    }).catch((error) => {
-      console.log(error);
-    });
+        // Use the backup data
+        this.jsonResponse = data;
 
-    // Create the map
-    this.map = new Map({
-      target: this.mapId,
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        }),
-        new Vector({
-          source: this.vectorSource
-        })
-      ],
-      overlays: [this.popup.popup],
-      controls: defaultControls().extend([
-        new ZoomToExtent({
-          extent: [
-            1418858.226930063, 6854302.831833711,
-            1565617.3212376016, 6935096.770731142
-          ]
-        })
-      ])
-    });
+      } finally {
+        // Create the features
+        const features = new GeoJSON({
+          dataProjection: 'EPSG:25833',
+          featureProjection: 'EPSG:3857'
+        }).readFeatures(this.jsonResponse);
 
-    // Display popup on click
-    this.map.on('click', (event) => {
-      const ft = this.map.forEachFeatureAtPixel(event.pixel, (feature) => {
-        return feature;
-      });
+        // Add features and set styling
+        this.vectorSource.addFeatures(features);
+        this.vectorSource.getFeatures().forEach(feature => {
+          const styleClass = this.getStyleClass(feature);
+          feature.setStyle(colourMapNormal.get(styleClass));
+        });
 
-      if (ft) {
-        const facilityName = ft.getProperties().ANLAGENBEZ;
-        const coordinates = ft.getGeometry().getCoordinates();
-        this.popup.popup.setPosition(coordinates);
+        const mapExtent = this.vectorSource.getExtent();
 
-        facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
+        // Create map
+        this.map = new Map({
+          target: this.mapId,
+          layers: [
+            new TileLayer({
+              className: 'bw',
+              source: new OSM()
+            }),
+            new Vector({
+              source: this.vectorSource
+            })
+          ],
+          overlays: [this.popup.popup],
+          controls: defaultControls().extend([
+            new ZoomToExtent({
+              extent: mapExtent
+            })
+          ])
+        });
+        this.map.getView().fit(mapExtent);
 
-        this.messageService.setFeature(ft.getProperties());
-      } else {
-        // Close popup and dashboard
-        this.popup.popup.setPosition(undefined);
-        this.messageService.setMessage('out');
+        // Display popup on click
+        this.map.on('click', event => {
+          const ft = this.map.forEachFeatureAtPixel(event.pixel, feature => {
+            return feature;
+          });
+
+          if (ft) {
+            const facilityName = ft.getProperties().ANLAGENBEZ;
+            const coordinates = ft.getGeometry().getCoordinates();
+            this.popup.popup.setPosition(coordinates);
+
+            facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
+
+            this.messageService.setFeature(ft.getProperties());
+          } else {
+            // Close popup and dashboard
+            this.popup.popup.setPosition(undefined);
+            this.messageService.setMessage('out');
+          }
+        });
+
+        // Change feature styling on hover
+        this.map.addInteraction(this.select);
       }
-    });
+    };
 
-    // Change feature styling on hover
-    this.map.addInteraction(this.select);
+    getData();
   }
 }

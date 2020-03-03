@@ -1,144 +1,61 @@
 import { Fill, Stroke, Circle, Style } from 'ol/style';
 
-// TODO: refactor the repetitions!
-const greenStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(72,201,176)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 6
-  })
+const normalRadius = 8;
+const highRadius = 14;
+
+const greenFill = new Fill({
+  color: 'rgb(72, 201, 176)'
 });
 
-const greenStyleHi = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(72,201,176)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 10
-  })
+const yellowFill = new Fill({
+  color: 'rgb(247, 220, 111)'
 });
 
-const yellowStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(247,220,111)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 6
-  })
+const redFill = new Fill({
+  color: 'rgb(231, 76, 60)'
 });
 
-const yellowStyleHi = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(247,220,111)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 10
-  })
+const purpleFill = new Fill({
+  color: 'rgb(91, 44, 111)'
 });
 
-const redStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(231,76,60)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 6
-  })
+const nodataFill = new Fill({
+  color: 'rgb(153, 163, 164)'
 });
 
-const redStyleHi = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(231,76,60)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 10
-  })
+const strokeDef = new Stroke({
+  color: 'rgb(255, 255, 255)',
+  width: 2
 });
 
-const purpleStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(91,44,111)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 6
-  })
-});
+const fillArr = [
+  greenFill,
+  yellowFill,
+  redFill,
+  purpleFill,
+  nodataFill
+];
 
-const purpleStyleHi = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(91,44,111)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 10
-  })
-});
+export const colourMapNormal = new Map();
+export const colourMapHi = new Map();
 
-const nodataStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(153,163,164)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 6
-  })
-});
+fillArr.map((element, index) => {
+  const normal = new Style({
+    image: new Circle({
+      fill: element,
+      stroke: strokeDef,
+      radius: normalRadius
+    })
+  });
 
-const nodataStyleHi = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgb(153,163,164)'
-    }),
-    stroke: new Stroke({
-      color: 'rgb(255, 255, 255)',
-      width: 2
-    }),
-    radius: 10
-  })
-});
+  const highlight = new Style({
+    image: new Circle({
+      fill: element,
+      stroke: strokeDef,
+      radius: highRadius
+    })
+  });
 
-export const colourMap = new Map();
-colourMap.set('green', greenStyle);
-colourMap.set('greenHi', greenStyleHi);
-colourMap.set('yellow', yellowStyle);
-colourMap.set('yellowHi', yellowStyleHi);
-colourMap.set('red', redStyle);
-colourMap.set('redHi', redStyleHi);
-colourMap.set('purple', purpleStyle);
-colourMap.set('purpleHi', purpleStyleHi);
-colourMap.set('nodata', nodataStyle);
-colourMap.set('nodataHi', nodataStyleHi);
+  colourMapNormal.set(index, normal);
+  colourMapHi.set(index, highlight);
+});
