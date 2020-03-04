@@ -8,25 +8,25 @@ import { MessageService } from './services/message.service';
   styleUrls: ['./app.component.css'],
   animations: [
     trigger('slideInOut', [
-      state('in', style({
+      state('dash-in', style({
         transform: 'translate3d(0, 0, 0)'
       })),
-      state('out', style({
+      state('dash-out', style({
         transform: 'translate3d(0, 100%, 0)'
       })),
-      transition('in => out', animate('400ms ease-in-out')),
-      transition('out => in', animate('400ms ease-in-out'))
+      transition('dash-in => dash-out', animate('400ms ease-in-out')),
+      transition('dash-out => dash-in', animate('400ms ease-in-out'))
     ]),
   ]
 })
 
 export class AppComponent {
   title = 'co2-app';
-  private menuState = 'out';
+  private dashState = 'dash-out';
 
   constructor(private messageService: MessageService) {
     this.messageService.setMessage$.subscribe((value) => {
-      this.menuState = value;
+      this.dashState = value;
     });
   }
 }

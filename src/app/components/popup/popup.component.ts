@@ -42,6 +42,6 @@ export class PopupComponent implements AfterViewInit {
    * Shows the dashboard
    */
   showDash() {
-    this.messageService.setMessage('in');
+    this.messageService.setMessage('dash-in');
   }
 }

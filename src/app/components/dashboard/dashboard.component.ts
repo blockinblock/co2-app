@@ -16,7 +16,7 @@ export class DashboardComponent implements AfterViewInit {
 
     // Click handler to hide the popup
     closer.onclick = () => {
-      this.messageService.setMessage('out');
+      this.messageService.setMessage('dash-out');
       closer.blur();
       return false;
     };

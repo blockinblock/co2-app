@@ -152,7 +152,7 @@ export class MapComponent implements AfterViewInit {
           } else {
             // Close popup and dashboard
             this.popup.popup.setPosition(undefined);
-            this.messageService.setMessage('out');
+            this.messageService.setMessage('dash-out');
           }
         });
 
