@@ -33,6 +33,9 @@ export class MapComponent implements AfterViewInit {
   private map: Map = null;
   private mapId = 'MyMap';
   private jsonResponse;
+  private vectorLayer = new Vector();
+
+  private mapExtent = [1472322.7367111205, 6874492.281365124, 1515891.0947332494, 6915771.816390304];
 
   private url = 'https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s08_07_2tehganlagen?service=wfs&' +
                 'version=1.1.0&request=GetFeature&typename=fis:s08_07_2tehganlagen&outputFormat=application/json';
@@ -85,18 +88,58 @@ export class MapComponent implements AfterViewInit {
     proj4.defs('EPSG:25833', '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs');
     register(proj4);
 
+    // Create map
+    this.map = new Map({
+      target: this.mapId,
+      layers: [
+        new TileLayer({
+          className: 'bw',
+          source: new OSM()
+        })
+      ],
+      overlays: [this.popup.popup],
+      controls: defaultControls().extend([
+        new ZoomToExtent({
+          extent: this.mapExtent
+        })
+      ])
+    });
+    this.map.getView().fit(this.mapExtent);
+
+    // Display popup on click
+    this.map.on('click', event => {
+      const ft = this.map.forEachFeatureAtPixel(event.pixel, feature => {
+        return feature;
+      });
+
+      if (ft) {
+        const facilityName = ft.getProperties().ANLAGENBEZ;
+        const coordinates = ft.getGeometry().getCoordinates();
+        this.popup.popup.setPosition(coordinates);
+
+        facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
+
+        this.messageService.setFeature(ft.getProperties());
+      } else {
+        // Close popup and dashboard
+        this.popup.popup.setPosition(undefined);
+        this.messageService.setMessage('dash-out');
+      }
+    });
+
+    // Change feature styling on hover
+    this.map.addInteraction(this.select);
+
     // Get the data async
     const getData = async () => {
       try {
         const response = await fetch(this.url);
         this.jsonResponse = await response.json();
 
-      } catch (e) {
-        // TODO: display message to user
-        console.log(e);
-
+      } catch (e) {    
         // Use the backup data
         this.jsonResponse = data;
+        console.log(e);
 
       } finally {
         // Create the features
@@ -111,56 +154,14 @@ export class MapComponent implements AfterViewInit {
           const styleClass = this.getStyleClass(feature);
           feature.setStyle(colourMapNormal.get(styleClass));
         });
-
-        const mapExtent = this.vectorSource.getExtent();
-
-        // Create map
-        this.map = new Map({
-          target: this.mapId,
-          layers: [
-            new TileLayer({
-              className: 'bw',
-              source: new OSM()
-            }),
-            new Vector({
-              source: this.vectorSource
-            })
-          ],
-          overlays: [this.popup.popup],
-          controls: defaultControls().extend([
-            new ZoomToExtent({
-              extent: mapExtent
-            })
-          ])
-        });
-        this.map.getView().fit(mapExtent);
-
-        // Display popup on click
-        this.map.on('click', event => {
-          const ft = this.map.forEachFeatureAtPixel(event.pixel, feature => {
-            return feature;
-          });
-
-          if (ft) {
-            const facilityName = ft.getProperties().ANLAGENBEZ;
-            const coordinates = ft.getGeometry().getCoordinates();
-            this.popup.popup.setPosition(coordinates);
-
-            facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
-
-            this.messageService.setFeature(ft.getProperties());
-          } else {
-            // Close popup and dashboard
-            this.popup.popup.setPosition(undefined);
-            this.messageService.setMessage('dash-out');
-          }
-        });
-
-        // Change feature styling on hover
-        this.map.addInteraction(this.select);
       }
     };
 
-    getData();
+    // Add layer once data is ready
+    getData().then(() => {
+      this.vectorLayer.setSource(this.vectorSource);
+      this.map.addLayer(this.vectorLayer);
+    });
+
   }
 }
