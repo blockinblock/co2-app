@@ -1,2 +1,4 @@
 <app-map></app-map>
-<app-dashboard [@slideInOut]="dashState" class="container"></app-dashboard>
+<app-dashboard [@dashInOut]="dashState" class="container"></app-dashboard>
+<app-legend *ngIf="legendState"></app-legend>
+<app-legendbtn></app-legendbtn>

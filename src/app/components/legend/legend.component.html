@@ -1,0 +1,11 @@
+<mat-card class="legend">
+  <mat-card-title>Legend</mat-card-title>
+  <mat-list-item *ngFor="let item of legendItems">
+    <mat-icon>
+      <svg viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="4" cy="4" r="2" [attr.fill]="item.color" />
+      </svg>
+    </mat-icon>
+    {{ item.text }}
+  </mat-list-item>
+</mat-card>

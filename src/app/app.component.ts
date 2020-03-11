@@ -7,7 +7,7 @@ import { MessageService } from './services/message.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
-    trigger('slideInOut', [
+    trigger('dashInOut', [
       state('dash-in', style({
         transform: 'translate3d(0, 0, 0)'
       })),
@@ -16,17 +16,30 @@ import { MessageService } from './services/message.service';
       })),
       transition('dash-in => dash-out', animate('400ms ease-in-out')),
       transition('dash-out => dash-in', animate('400ms ease-in-out'))
-    ]),
+    ])
   ]
 })
 
 export class AppComponent {
   title = 'co2-app';
   private dashState = 'dash-out';
+  private legendState = false;
 
   constructor(private messageService: MessageService) {
-    this.messageService.setMessage$.subscribe((value) => {
-      this.dashState = value;
+    this.messageService.setMessage$.subscribe(value => {
+      // Toggle dashboard
+      if (value === 'dash-out' || value === 'dash-in') {
+        this.dashState = value;
+      }
+
+      // Toggle legend
+      if (value === 'legend-toggle') {
+        if (this.legendState === false) {
+          this.legendState = true;
+        } else if (this.legendState === true) {
+          this.legendState = false;
+        }
+      }
     });
   }
 }

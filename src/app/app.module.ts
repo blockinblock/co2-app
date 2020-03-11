@@ -4,6 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatButtonModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -15,7 +18,9 @@ import { MessageService } from './services/message.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BarchartComponent } from './components/barchart/barchart.component';
 import { DetailsComponent } from './components/details/details.component';
+import { LegendbtnComponent } from './components/controls/legendbtn/legendbtn.component';
 import { FormatNumberPipe } from './utils/format-number.pipe';
+import { LegendComponent } from './components/legend/legend.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +30,9 @@ import { FormatNumberPipe } from './utils/format-number.pipe';
     DashboardComponent,
     BarchartComponent,
     DetailsComponent,
-    FormatNumberPipe
+    LegendbtnComponent,
+    FormatNumberPipe,
+    LegendComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +40,9 @@ import { FormatNumberPipe } from './utils/format-number.pipe';
     NgxChartsModule,
     MatButtonModule,
     MatTableModule,
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
     FormsModule,
     ReactiveFormsModule
   ],

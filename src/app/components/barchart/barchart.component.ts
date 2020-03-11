@@ -21,8 +21,7 @@ export class BarchartComponent {
   xAxisLabel = 'Year';
   showYAxisLabel = true;
   yAxisLabel = 'CO2 equiv. emissions';
-  // yScaleMin = 0;
-  // yScaleMax = 3300000;
+  roundEdges = false;
 
   // colorScheme = {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -35,22 +34,15 @@ export class BarchartComponent {
   constructor(private messageService: MessageService) {
     // Get feature details
     this.messageService.setFeature$.subscribe((value) => {
-      let dataArr = [];
-
-      // TODO: explanation of co2 on hover
+      const dataArr = [];
       const startYear = 2005;
       const endYear = 2017;
 
       for (let i = startYear; i <= endYear; i++) {
-        let val;
-
-        // Workaround for values that are zero
-        value[`SD${i}`] === '' ? val = '0.00000000000000001' : val = value[`SD${i}`];
-
         dataArr.push(
           {
             name: i,
-            value: val
+            value: value[`SD${i}`]
           }
         );
       }

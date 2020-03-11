@@ -12,8 +12,6 @@ import { Vector } from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { colourMapNormal, colourMapHi } from './ol.styles';
-import { data } from './data';
 
 // Reprojections and conversions
 import proj4 from 'proj4';
@@ -21,7 +19,9 @@ import { register } from 'ol/proj/proj4';
 
 // App components
 import { PopupComponent } from '../popup/popup.component';
+import { styles, getStyle } from '../map/ol.styles';
 import { MessageService } from '../../services/message.service';
+import { data } from './data';
 
 @Component({
   selector: 'app-map',
@@ -51,7 +51,7 @@ export class MapComponent implements AfterViewInit {
   private select = new Select({
     condition: pointerMove,
     style: feature => {
-      return colourMapHi.get(this.getStyleClass(feature));
+      return getStyle(feature, 'highlight');
     }
   });
 
@@ -60,28 +60,6 @@ export class MapComponent implements AfterViewInit {
   // @ViewChild(PopupComponent) popup;
 
   constructor(private messageService: MessageService) { }
-
-  /**
-   * Takes a feature and determines the styling class
-   * @param feature an OpenLayers Feature (ol/Feature)
-   */
-  private getStyleClass(feature) {
-    const val = feature.get('SD2017');
-    let styleClass;
-
-    if (val <= 100000) {
-      styleClass = 0;
-    } else if (val > 100000 && val <= 500000) {
-      styleClass = 1;
-    } else if (val > 500000 && val <= 1000000) {
-      styleClass = 2;
-    } else if (val > 1000000) {
-      styleClass = 3;
-    } else {
-      styleClass = 4;
-    }
-    return styleClass;
-  }
 
   ngAfterViewInit() {
     // Define and register projection
@@ -97,7 +75,9 @@ export class MapComponent implements AfterViewInit {
           source: new OSM()
         })
       ],
-      overlays: [this.popup.popup],
+      overlays: [
+        this.popup.popup
+      ],
       controls: defaultControls().extend([
         new ZoomToExtent({
           extent: this.mapExtent
@@ -136,7 +116,7 @@ export class MapComponent implements AfterViewInit {
         const response = await fetch(this.url);
         this.jsonResponse = await response.json();
 
-      } catch (e) {    
+      } catch (e) {
         // Use the backup data
         this.jsonResponse = data;
         console.log(e);
@@ -151,8 +131,7 @@ export class MapComponent implements AfterViewInit {
         // Add features and set styling
         this.vectorSource.addFeatures(features);
         this.vectorSource.getFeatures().forEach(feature => {
-          const styleClass = this.getStyleClass(feature);
-          feature.setStyle(colourMapNormal.get(styleClass));
+          feature.setStyle(getStyle(feature, 'normal'));
         });
       }
     };
@@ -162,6 +141,5 @@ export class MapComponent implements AfterViewInit {
       this.vectorLayer.setSource(this.vectorSource);
       this.map.addLayer(this.vectorLayer);
     });
-
   }
 }
