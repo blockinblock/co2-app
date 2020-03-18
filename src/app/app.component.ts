@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { MessageService } from './services/message.service';
+import { MatDialog } from '@angular/material/dialog';
+import { IntroComponent } from './components/intro/intro.component';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +26,9 @@ export class AppComponent {
   title = 'co2-app';
   private dashState = 'dash-out';
   private legendState = false;
+  private legendinfoState = false;
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, public dialog: MatDialog) {
     this.messageService.setMessage$.subscribe(value => {
       // Toggle dashboard
       if (value === 'dash-out' || value === 'dash-in') {
@@ -40,6 +43,18 @@ export class AppComponent {
           this.legendState = false;
         }
       }
+
+      // Show legend info
+      if (value === 'legendinfo-in') {
+        this.legendinfoState = true;
+      }
+    });
+
+    // Open intro dialog
+    const dialogRef = this.dialog.open(IntroComponent,
+      {
+        height: '330px',
+        width: '500px'
     });
   }
 }

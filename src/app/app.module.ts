@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -21,6 +22,7 @@ import { DetailsComponent } from './components/details/details.component';
 import { LegendbtnComponent } from './components/controls/legendbtn/legendbtn.component';
 import { FormatNumberPipe } from './utils/format-number.pipe';
 import { LegendComponent } from './components/legend/legend.component';
+import { IntroComponent } from './components/intro/intro.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { LegendComponent } from './components/legend/legend.component';
     DetailsComponent,
     LegendbtnComponent,
     FormatNumberPipe,
-    LegendComponent
+    LegendComponent,
+    IntroComponent
   ],
   imports: [
     BrowserModule,
@@ -43,11 +46,13 @@ import { LegendComponent } from './components/legend/legend.component';
     MatCardModule,
     MatListModule,
     MatIconModule,
+    MatDialogModule,
     FormsModule,
     ReactiveFormsModule
   ],
   providers: [MessageService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [IntroComponent]
 })
 
 export class AppModule { }

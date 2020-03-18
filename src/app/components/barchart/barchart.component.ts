@@ -20,7 +20,7 @@ export class BarchartComponent {
   showXAxisLabel = true;
   xAxisLabel = 'Year';
   showYAxisLabel = true;
-  yAxisLabel = 'CO2 equiv. emissions';
+  yAxisLabel = 'CO2-eq';
   roundEdges = false;
 
   // colorScheme = {
