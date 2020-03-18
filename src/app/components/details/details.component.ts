@@ -17,15 +17,6 @@ export class DetailsComponent {
   private displayedColumns: string[] = ['label', 'contents'];
   private dataSource;
 
-  private facilityID;
-  private facilityName;
-  private facilityType;
-  private status;
-  private operator;
-  private address;
-  private sectorDesc;
-  private sectorCode;
-
   constructor(private messageService: MessageService) {
     this.messageService.setFeature$.subscribe((value) => {
 

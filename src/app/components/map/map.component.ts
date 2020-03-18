@@ -19,7 +19,7 @@ import { register } from 'ol/proj/proj4';
 
 // App components
 import { PopupComponent } from '../popup/popup.component';
-import { styles, getStyle } from '../map/ol.styles';
+import { getStyle } from '../map/ol.styles';
 import { MessageService } from '../../services/message.service';
 import { data } from './data';
 
