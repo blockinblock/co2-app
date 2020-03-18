@@ -10,7 +10,7 @@ export class LegendbtnComponent {
 
   constructor(private messageService: MessageService) { }
 
-  private showLegend() {
+  public showLegend() {
     this.messageService.setMessage('legend-toggle');
   }
 }

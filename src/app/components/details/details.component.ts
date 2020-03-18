@@ -14,8 +14,8 @@ export interface FacilityInfo {
 
 export class DetailsComponent {
 
-  private displayedColumns: string[] = ['label', 'contents'];
-  private dataSource;
+  public displayedColumns: string[] = ['label', 'contents'];
+  public dataSource;
 
   constructor(private messageService: MessageService) {
     this.messageService.setFeature$.subscribe((value) => {

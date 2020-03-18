@@ -9,7 +9,7 @@ import { styles } from '../map/ol.styles';
 
 export class LegendComponent {
 
-  private legendItems = [];
+  public legendItems = [];
   private styles;
 
   constructor() {

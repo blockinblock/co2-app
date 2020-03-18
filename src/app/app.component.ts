@@ -24,8 +24,8 @@ import { IntroComponent } from './components/intro/intro.component';
 
 export class AppComponent {
   title = 'co2-app';
-  private dashState = 'dash-out';
-  private legendState = false;
+  public dashState = 'dash-out';
+  public legendState = false;
   private legendinfoState = false;
 
   constructor(private messageService: MessageService, public dialog: MatDialog) {

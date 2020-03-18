@@ -31,7 +31,7 @@ import { data } from './data';
 
 export class MapComponent implements AfterViewInit {
   private map: Map = null;
-  private mapId = 'MyMap';
+  public mapId = 'MyMap';
   private jsonResponse;
   private vectorLayer = new Vector();
 

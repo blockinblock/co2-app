@@ -8,7 +8,7 @@ import { MessageService } from '../../services/message.service';
 })
 
 export class BarchartComponent {
-  private data: any[];
+  public data: any[];
 
   view: any[] = [700, 200];
 
