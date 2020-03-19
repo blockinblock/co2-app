@@ -5,4 +5,4 @@ and rendered using OpenLayers and the ngx-charts framework.
 
 ## Versions
 
-Angular/Material v8.2, OpenLayers v6.12, ngx-chsrts v13.
+Angular/Material v8.2, OpenLayers v6.12, ngx-charts v13.
