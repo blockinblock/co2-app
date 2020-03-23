@@ -9,6 +9,7 @@ import { MessageService } from '../../services/message.service';
 
 export class BarchartComponent {
   public data: any[];
+  private hasData = false;
 
   view: any[] = [700, 200];
 
@@ -22,6 +23,7 @@ export class BarchartComponent {
   showYAxisLabel = true;
   yAxisLabel = 'CO2-eq';
   roundEdges = false;
+  noBarWhenZero = true;
 
   colorScheme = {
     domain: ['#8fbc8f']
@@ -35,6 +37,10 @@ export class BarchartComponent {
       const endYear = 2017;
 
       for (let i = startYear; i <= endYear; i++) {
+
+        // If there's data for at least one of the years
+        value[`SD${i}`].length > 0 ? this.hasData = true : this.hasData = false;
+
         dataArr.push(
           {
             name: i,

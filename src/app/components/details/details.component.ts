@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { MessageService } from '../../services/message.service';
 
-export interface FacilityInfo {
-  key: string;
-  value: string;
-}
-
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
@@ -13,27 +8,24 @@ export interface FacilityInfo {
 })
 
 export class DetailsComponent {
-
-  public displayedColumns: string[] = ['label', 'contents'];
   public dataSource;
+  public fName;
+  public fType;
+  public fStatus;
+  public fAddress;
+  public fOperator;
+  public fClassification;
 
   constructor(private messageService: MessageService) {
     this.messageService.setFeature$.subscribe((value) => {
-
       let name;
-      value.ANLAGENBEZ.length > 0 ? name = value.ANLAGENBEZ : name = '---';
-
-      const ELEMENT_DATA: FacilityInfo[] = [
-        { key: 'ID', value: value.ID },
-        { key: 'Name', value: name },
-        { key: 'Type', value: value.ANLAGENART },
-        { key: 'Status', value: value.STATUS_TYP},
-        { key: 'Operator', value: value.BETREIBER },
-        { key: 'Address', value: `${value.STANDORT}, ${value.PLZ} Berlin` },
-        { key: 'Classification', value: value.NACE_WZ2008_BEZ }
-      ];
-
-      this.dataSource = ELEMENT_DATA;
+      value.ANLAGENBEZ.length > 0 ? name = value.ANLAGENBEZ : name = '(no name)';
+      this.fName = `${name} (${value.ID})`;
+      this.fType = value.ANLAGENART;
+      this.fStatus = value.STATUS_TYP;
+      this.fAddress = `${value.STANDORT}, ${value.PLZ} Berlin`;
+      this.fOperator = value.BETREIBER;
+      this.fClassification = value.NACE_WZ2008_BEZ;
     });
   }
 }

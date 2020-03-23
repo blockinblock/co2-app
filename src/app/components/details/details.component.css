@@ -1,17 +1,21 @@
-.mat-table {
-    width: 100%;
-    background: #fff;
+.div__details {
+    padding-left: 30px;
 }
 
-.mat-row {
-    height: 26px;
+.header__text {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
-.mat-row:hover {
-    background-color: #8fbc8f;
-  }
+.table__key {
+    text-align: left;
+    vertical-align: 0px;
+    color: #515A5A;
+}
 
-.mat-cell {
-    color: #000;
-    padding-right: 10px;
+.table__value {
+    text-align: left;
+    vertical-align: 0px;
+    padding-left: 40px;
+    font-weight: bold;
 }

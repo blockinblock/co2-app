@@ -1,3 +1,27 @@
+.div__barchart {
+  display: flex;
+  justify-content: center;
+}
+
 .tooltip-value {
     font-size: 1.5em;
+}
+
+.mat-card {
+  position: absolute;
+  background: #fff;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  width: 80px !important;
+  height: 20px !important;
+  z-index: 1000;
+  left: 74vw;
+  top: 33%;
+}
+
+.mat-card-content {
+  color: #000;
+  font-size: 1em;
+  padding: 0px;
 }

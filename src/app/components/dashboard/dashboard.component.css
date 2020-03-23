@@ -8,3 +8,15 @@
   width: auto;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
+
+.dash__details {
+  width: 50vw;
+  padding: 0px;
+}
+
+.dash__barchart {
+  padding-top: 15px;
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+}
