@@ -19,9 +19,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BarchartComponent } from './components/barchart/barchart.component';
 import { DetailsComponent } from './components/details/details.component';
 import { LegendbtnComponent } from './components/controls/legendbtn/legendbtn.component';
-import { FormatNumberPipe } from './utils/format-number.pipe';
 import { LegendComponent } from './components/legend/legend.component';
 import { IntroComponent } from './components/intro/intro.component';
+import { IntrobtnComponent } from './components/controls/introbtn/introbtn.component';
+import { FormatNumberPipe } from './utils/format-number.pipe';
 
 @NgModule({
   declarations: [
@@ -32,9 +33,10 @@ import { IntroComponent } from './components/intro/intro.component';
     BarchartComponent,
     DetailsComponent,
     LegendbtnComponent,
-    FormatNumberPipe,
     LegendComponent,
-    IntroComponent
+    IntrobtnComponent,
+    IntroComponent,
+    FormatNumberPipe
   ],
   imports: [
     BrowserModule,

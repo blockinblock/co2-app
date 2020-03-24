@@ -62,8 +62,4 @@ export class BarchartComponent {
   formatYear(val) {
     return val;
   }
-
-  onSelect(event) {
-    console.log(event);
-  }
 }

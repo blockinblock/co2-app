@@ -26,7 +26,11 @@ export class AppComponent {
   title = 'co2-app';
   public dashState = 'dash-out';
   public legendState = false;
-  private legendinfoState = false;
+
+  private introConfig = {
+    height: '330px',
+    width: '500px'
+  };
 
   constructor(private messageService: MessageService, public dialog: MatDialog) {
     this.messageService.setMessage$.subscribe(value => {
@@ -44,17 +48,13 @@ export class AppComponent {
         }
       }
 
-      // Show legend info
-      if (value === 'legendinfo-in') {
-        this.legendinfoState = true;
+      // Open intro dialog
+      if (value === 'intro-toggle') {
+          this.dialog.open(IntroComponent, this.introConfig);
       }
     });
 
     // Open intro dialog
-    const dialogRef = this.dialog.open(IntroComponent,
-      {
-        height: '330px',
-        width: '500px'
-    });
+    this.dialog.open(IntroComponent, this.introConfig);
   }
 }

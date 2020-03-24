@@ -6,6 +6,7 @@ import { MessageService } from '../../../services/message.service';
   templateUrl: './legendbtn.component.html',
   styleUrls: ['./legendbtn.component.css']
 })
+
 export class LegendbtnComponent {
 
   constructor(private messageService: MessageService) { }

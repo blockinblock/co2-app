@@ -16,8 +16,7 @@
     [yAxisLabel]="yAxisLabel"
     [xAxisTickFormatting]="formatYear"
     [roundEdges]="roundEdges"
-    [noBarWhenZero]="noBarWhenZero"
-    (select)="onSelect($event)">
+    [noBarWhenZero]="noBarWhenZero">
     <ng-template #tooltipTemplate let-model="model">
       <p>
         <span>{{ model.name }}</span>
