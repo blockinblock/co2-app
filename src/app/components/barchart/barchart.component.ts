@@ -9,7 +9,7 @@ import { MessageService } from '../../services/message.service';
 
 export class BarchartComponent {
   public data: any[];
-  private hasData = false;
+  public hasData = false;
 
   view: any[] = [700, 200];
 
