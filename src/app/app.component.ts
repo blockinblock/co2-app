@@ -29,7 +29,7 @@ export class AppComponent {
 
   private introConfig = {
     height: '330px',
-    width: '500px'
+    width: '550px'
   };
 
   constructor(private messageService: MessageService, public dialog: MatDialog) {

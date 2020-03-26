@@ -3,13 +3,13 @@ import { Fill, Stroke, Circle, Style } from 'ol/style';
 const normalRadius = 8;
 const highRadius = 14;
 
-const green = 'rgb(72, 201, 176)';
-const yellow = 'rgb(247, 220, 111)';
-const red = 'rgb(231, 76, 60)';
-const purple = 'rgb(91, 44, 111)';
-const nodata = 'rgb(153, 163, 164)';
+const green = '#48C9B0';
+const yellow = '#F7DC6F';
+const red = '#E74C3C';
+const purple = '#5B2C6F';
+const nodata = '#797D7F';
 
-const colors = [
+export const colors = [
   green,
   yellow,
   red,
@@ -18,7 +18,7 @@ const colors = [
 ];
 
 const strokeDef = new Stroke({
-  color: 'rgb(255, 255, 255)',
+  color: '#FFFFFF',
   width: 2
 });
 
@@ -88,24 +88,47 @@ colors.forEach((col, i) => {
 
 
 /**
- * Returns the OpenLayers Style based on the feature and whether normal or highlighted styling needed.
- * @param feature The OpenLayers vector feature
+ * Returns the OpenLayers Style or Hex color based on :
+ * - the feature and whether normal or highlighted styling needed.
+ * - or the hex color
+ * @param feature The OpenLayers vector feature or CO2 value
  * @param styleType 'normal' or 'highlight'
+ * @param returnType 'style' for an OL style or 'color' for the hex color
  */
-export const getStyle = (feature, styleType = 'normal') => {
-  const val = feature.get('SD2017');
+export const getStyle = (feature, styleType = 'normal', returnType = 'style') => {
+  let val;
   let styleClass = 4;   // No data
+  let color = nodata;
 
-  // Determine style class based on preset bandings
-  if (val <= styles[0].lt) {
-    styleClass = 0;
-  } else if (val > styles[1].gt && val <= styles[1].lt) {
-    styleClass = 1;
-  } else if (val > styles[2].gt && val <= styles[2].lt) {
-    styleClass = 2;
-  } else if (val > styles[3].gt) {
-    styleClass = 3;
+  // Get value for 2017 if it's a style, otherwise the feature IS the value
+  if (returnType === 'style') {
+    val = feature.get('SD2017');
+  } else if (returnType === 'color') {
+    val = feature;
   }
 
-  return styles[styleClass][styleType];
+  // Determine style class based on preset bandings
+  if (val.length === 0) {
+    styleClass = 4;
+    color = nodata;
+  } else if (val <= styles[0].lt) {
+    styleClass = 0;
+    color = green;
+  } else if (val > styles[1].gt && val <= styles[1].lt) {
+    styleClass = 1;
+    color = yellow;
+  } else if (val > styles[2].gt && val <= styles[2].lt) {
+    styleClass = 2;
+    color = red;
+  } else if (val > styles[3].gt) {
+    styleClass = 3;
+    color = purple;
+  }
+
+  // Return style or color
+  if (returnType === 'style') {
+    return styles[styleClass][styleType];
+  } else if (returnType === 'color') {
+    return color;
+  }
 };

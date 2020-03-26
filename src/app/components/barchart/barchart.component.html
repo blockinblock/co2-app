@@ -1,7 +1,7 @@
 <mat-card *ngIf="!hasData">
   <mat-card-content>No data</mat-card-content>
 </mat-card>
-<div class="div__barchart">
+<div *ngIf="chartData" class="div__barchart">
   <ngx-charts-bar-vertical
     [view]="view"
     [scheme]="colorScheme"

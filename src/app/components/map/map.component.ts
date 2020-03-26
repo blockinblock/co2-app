@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import axios from 'axios';
 
 // OpenLayers
 import 'ol/ol.css';
@@ -113,8 +114,7 @@ export class MapComponent implements AfterViewInit {
     // Get the data async
     const getData = async () => {
       try {
-        const response = await fetch(this.url);
-        this.jsonResponse = await response.json();
+        this.jsonResponse = await (await axios(this.url)).data;
 
       } catch (e) {
         // Use the backup data

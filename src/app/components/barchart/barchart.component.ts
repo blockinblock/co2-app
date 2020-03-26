@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MessageService } from '../../services/message.service';
+import { colors, getStyle } from '../map/ol.styles';
 
 @Component({
   selector: 'app-barchart',
@@ -8,12 +9,11 @@ import { MessageService } from '../../services/message.service';
 })
 
 export class BarchartComponent {
-  public data: any[];
-  public hasData = false;
-
-  view: any[] = [700, 200];
+  public hasData = false;   // For no data label
 
   // Chart options
+  public data: any[];
+  view: any[] = [700, 200];
   showXAxis = true;
   showYAxis = true;
   gradient = false;
@@ -25,9 +25,9 @@ export class BarchartComponent {
   roundEdges = false;
   noBarWhenZero = true;
 
-  colorScheme = {
-    domain: ['#8fbc8f']
-  };
+  public chartData = false;
+  public domainArr = [];
+  public colorScheme = {};
 
   constructor(private messageService: MessageService) {
     // Get feature details
@@ -36,8 +36,11 @@ export class BarchartComponent {
       const startYear = 2005;
       const endYear = 2017;
 
-      for (let i = startYear; i <= endYear; i++) {
+      // Reset barchart
+      this.domainArr = [];
+      this.colorScheme = {};
 
+      for (let i = startYear; i <= endYear; i++) {
         // If there's data for at least one of the years
         value[`SD${i}`].length > 0 ? this.hasData = true : this.hasData = false;
 
@@ -47,11 +50,22 @@ export class BarchartComponent {
             value: value[`SD${i}`]
           }
         );
+
+        // Append colors for barchart
+        this.domainArr.push(getStyle(value[`SD${i}`], '', 'color'));
       }
       this.data = dataArr;
 
+      // Construct barchart scheme
+      this.colorScheme = {
+        domain: this.domainArr
+      };
+
       // Assign chart object
       Object.assign(this, { dataArr });
+
+      // Enable the barchart coomponent
+      this.chartData = true;
     });
   }
 
