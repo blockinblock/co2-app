@@ -100,9 +100,10 @@ export const getStyle = (feature, styleType = 'normal', returnType = 'style') =>
   let styleClass = 4;   // No data
   let color = nodata;
 
-  // Get value for 2017 if it's a style, otherwise the feature IS the value
+  // Get value for the last year if it's a style, otherwise the feature IS the value
   if (returnType === 'style') {
-    val = feature.get('SD2017');
+    const lastYear = new Date().getFullYear() - 1;
+    val = feature.get(`sd${lastYear}`);
   } else if (returnType === 'color') {
     val = feature;
   }

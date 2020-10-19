@@ -34,7 +34,7 @@ export class BarchartComponent {
     this.messageService.setFeature$.subscribe((value) => {
       const dataArr = [];
       const startYear = 2005;
-      const endYear = 2017;
+      const endYear = new Date().getFullYear() - 1;
 
       // Reset barchart
       this.domainArr = [];
@@ -42,17 +42,17 @@ export class BarchartComponent {
 
       for (let i = startYear; i <= endYear; i++) {
         // If there's data for at least one of the years
-        value[`SD${i}`].length > 0 ? this.hasData = true : this.hasData = false;
+        value[`sd${i}`].length > 0 ? this.hasData = true : this.hasData = false;
 
         dataArr.push(
           {
             name: i,
-            value: value[`SD${i}`]
+            value: value[`sd${i}`]
           }
         );
 
         // Append colors for barchart
-        this.domainArr.push(getStyle(value[`SD${i}`], '', 'color'));
+        this.domainArr.push(getStyle(value[`sd${i}`], '', 'color'));
       }
       this.data = dataArr;
 

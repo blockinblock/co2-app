@@ -19,13 +19,12 @@ export class DetailsComponent {
   constructor(private messageService: MessageService) {
     this.messageService.setFeature$.subscribe((value) => {
       let name;
-      value.ANLAGENBEZ.length > 0 ? name = value.ANLAGENBEZ : name = '(no name)';
-      this.fName = `${name} (${value.ID})`;
-      this.fType = value.ANLAGENART;
-      this.fStatus = value.STATUS_TYP;
-      this.fAddress = `${value.STANDORT}, ${value.PLZ} Berlin`;
-      this.fOperator = value.BETREIBER;
-      this.fClassification = value.NACE_WZ2008_BEZ;
+      value.anlagenbez.length > 0 ? name = value.anlagenbez : name = '(no name)';
+      this.fName = `${name} (${value.id})`;
+      this.fStatus = value.statustyp;
+      this.fAddress = `${value.standort}, ${value.plz} Berlin`;
+      this.fOperator = value.betreiber;
+      this.fClassification = value.nace_wz2008_bez;
     });
   }
 }

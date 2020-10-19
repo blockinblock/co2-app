@@ -98,7 +98,7 @@ export class MapComponent implements AfterViewInit {
         const coordinates = ft.getGeometry().getCoordinates();
         this.popup.popup.setPosition(coordinates);
 
-        facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().BETREIBER;
+        facilityName ? this.popup.content.innerHTML = facilityName : this.popup.content.innerHTML = ft.getProperties().betreiber;
 
         this.messageService.setFeature(ft.getProperties());
       } else {
