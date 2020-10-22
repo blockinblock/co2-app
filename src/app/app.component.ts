@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { MessageService } from './services/message.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IntroComponent } from './components/intro/intro.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -22,10 +23,12 @@ import { IntroComponent } from './components/intro/intro.component';
   ]
 })
 
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   title = 'co2-app';
-  public dashState = 'dash-out';
-  public legendState = false;
+  dashState = 'dash-out';
+  legendState = false;
+
+  private subs: Subscription;
 
   private introConfig = {
     height: '330px',
@@ -33,7 +36,7 @@ export class AppComponent {
   };
 
   constructor(private messageService: MessageService, public dialog: MatDialog) {
-    this.messageService.setMessage$.subscribe(value => {
+    this.subs = this.messageService.setMessage$.subscribe(value => {
       // Toggle dashboard
       if (value === 'dash-out' || value === 'dash-in') {
         this.dashState = value;
@@ -56,5 +59,9 @@ export class AppComponent {
 
     // Open intro dialog
     this.dialog.open(IntroComponent, this.introConfig);
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

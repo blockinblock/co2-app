@@ -9,14 +9,12 @@
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
-.dash__details {
-  width: 50vw;
-  padding: 0px;
-}
-
-.dash__barchart {
+.flex-container {
   padding-top: 15px;
-  width: 50vw;
+  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  overflow: auto;
 }

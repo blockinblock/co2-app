@@ -56,9 +56,7 @@ export class MapComponent implements AfterViewInit {
     }
   });
 
-  // TODO: swap for Angular 8!
   @ViewChild(PopupComponent, {static: false}) popup;
-  // @ViewChild(PopupComponent) popup;
 
   constructor(private messageService: MessageService) { }
 
@@ -94,7 +92,7 @@ export class MapComponent implements AfterViewInit {
       });
 
       if (ft) {
-        const facilityName = ft.getProperties().ANLAGENBEZ;
+        const facilityName = ft.getProperties().anlagenbez;
         const coordinates = ft.getGeometry().getCoordinates();
         this.popup.popup.setPosition(coordinates);
 
@@ -114,7 +112,8 @@ export class MapComponent implements AfterViewInit {
     // Get the data async
     const getData = async () => {
       try {
-        this.jsonResponse = await (await axios(this.url)).data;
+        // this.jsonResponse = await (await axios(this.url)).data;
+        this.jsonResponse = data;
 
       } catch (e) {
         // Use the backup data

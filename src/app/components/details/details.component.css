@@ -14,6 +14,7 @@
 }
 
 .table__value {
+    width: 40vw;
     text-align: left;
     vertical-align: 0px;
     padding-left: 40px;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { styles } from '../map/ol.styles';
 
 @Component({
@@ -7,12 +7,11 @@ import { styles } from '../map/ol.styles';
   styleUrls: ['./legend.component.css']
 })
 
-export class LegendComponent {
-
-  public legendItems = [];
+export class LegendComponent implements OnInit {
+  legendItems = [];
   private styles;
 
-  constructor() {
+  ngOnInit() {
     this.styles = styles;
 
     // Build the legend items

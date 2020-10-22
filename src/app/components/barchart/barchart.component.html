@@ -1,6 +1,6 @@
-<mat-card *ngIf="!hasData">
-  <mat-card-content>No data</mat-card-content>
-</mat-card>
+<p *ngIf="!hasData">
+  No data available
+</p>
 <div *ngIf="chartData" class="div__barchart">
   <ngx-charts-bar-vertical
     [view]="view"
@@ -21,7 +21,7 @@
       <p>
         <span>{{ model.name }}</span>
         <br>
-        <span class="tooltip-value">{{ model.value | formatNumber }}</span>      
+        <span class="tooltip-value">{{ model.value | formatNumber }}</span>
       </p>
     </ng-template>
   </ngx-charts-bar-vertical>

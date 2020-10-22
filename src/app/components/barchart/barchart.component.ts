@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/message.service';
-import { colors, getStyle } from '../map/ol.styles';
+import { getStyle } from '../map/ol.styles';
 
 @Component({
   selector: 'app-barchart',
@@ -8,11 +9,11 @@ import { colors, getStyle } from '../map/ol.styles';
   styleUrls: ['./barchart.component.css']
 })
 
-export class BarchartComponent {
-  public hasData = false;   // For no data label
+export class BarchartComponent implements OnDestroy {
+  hasData = false;   // For no data label
 
   // Chart options
-  public data: any[];
+  data: any[];
   view: any[] = [700, 200];
   showXAxis = true;
   showYAxis = true;
@@ -25,13 +26,15 @@ export class BarchartComponent {
   roundEdges = false;
   noBarWhenZero = true;
 
-  public chartData = false;
-  public domainArr = [];
-  public colorScheme = {};
+  chartData = false;
+  domainArr = [];
+  colorScheme = {};
+
+  private subs: Subscription;
 
   constructor(private messageService: MessageService) {
     // Get feature details
-    this.messageService.setFeature$.subscribe((value) => {
+    this.subs = this.messageService.setFeature$.subscribe((value) => {
       const dataArr = [];
       const startYear = 2005;
       const endYear = new Date().getFullYear() - 1;
@@ -75,5 +78,9 @@ export class BarchartComponent {
    */
   formatYear(val) {
     return val;
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
