@@ -112,6 +112,7 @@ export class MapComponent implements AfterViewInit {
     // Get the data async
     const getData = async () => {
       try {
+        // Uses pre-fetched data for demo purposes due to regular breaking changes in the WFS feed
         // this.jsonResponse = await (await axios(this.url)).data;
         this.jsonResponse = data;
 
