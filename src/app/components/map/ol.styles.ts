@@ -102,7 +102,8 @@ export const getStyle = (feature, styleType = 'normal', returnType = 'style') =>
 
   // Get value for the last year if it's a style, otherwise the feature IS the value
   if (returnType === 'style') {
-    const lastYear = new Date().getFullYear() - 1;
+    // const lastYear = new Date().getFullYear() - 1;
+    const lastYear = 2019;    // Hard code to match pre-loaded data
     val = feature.get(`sd${lastYear}`);
   } else if (returnType === 'color') {
     val = feature;

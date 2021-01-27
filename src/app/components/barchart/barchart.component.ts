@@ -37,7 +37,8 @@ export class BarchartComponent implements OnDestroy {
     this.subs = this.messageService.setFeature$.subscribe((value) => {
       const dataArr = [];
       const startYear = 2005;
-      const endYear = new Date().getFullYear() - 1;
+      // const endYear = new Date().getFullYear() - 1;
+      const endYear = 2019;    // Hard code to match pre-loaded data
 
       // Reset barchart
       this.domainArr = [];
